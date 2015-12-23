@@ -7,6 +7,7 @@ from datetime import datetime, timedelta
 from uuid import uuid4
 
 from openprocurement.api.utils import VERSION
+from openprocurement.planning.api.utils import get_db
 
 
 now = datetime.now()
@@ -143,7 +144,7 @@ class BaseWebTest(unittest.TestCase):
         self.app.RequestClass = PrefixedRequestClass
         self.app.authorization = ('Basic', ('token', ''))
         self.couchdb_server = self.app.app.registry.couchdb_server
-        self.db = self.app.app.registry.db_plan  if hasattr(self.app.app.registry, 'db_plan') else self.app.app.registry.db
+        self.db = get_db(self.app.app.registry)
 
 
     def tearDown(self):

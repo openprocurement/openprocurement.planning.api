@@ -3,7 +3,6 @@ from couchdb.design import ViewDefinition
 from openprocurement.api import design
 from openprocurement.api.design import add_index_options
 
-
 FIELDS = [
     'planID',
 ]
@@ -17,16 +16,20 @@ def add_design():
         if "_view" in i:
             setattr(design, i, j)
 
+
 def add_design_db(db):
+    """ add local views *_view to database
+    :param db: database
+    """
     views = [j for i, j in globals().items() if "_view" in i]
     ViewDefinition.sync_many(db, views, callback=add_index_options)
+
 
 plans_all_view = ViewDefinition('plans', 'all', '''function(doc) {
     if(doc.doc_type == 'Plan') {
         emit(doc.planID, null);
     }
 }''')
-
 
 plans_by_dateModified_view = ViewDefinition('plans', 'by_dateModified', '''function(doc) {
     if(doc.doc_type == 'Plan') {
