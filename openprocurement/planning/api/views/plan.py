@@ -54,7 +54,7 @@ class PlansResource(object):
     def __init__(self, request, context):
         self.request = request
         self.server = request.registry.couchdb_server
-        self.db = request.registry.db
+        self.db = request.registry.db_plan  if hasattr(request.registry, 'db_plan') else request.registry.db
         self.server_id = request.registry.server_id
 
     @json_view(permission='view_plan')

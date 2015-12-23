@@ -20,7 +20,7 @@ class Root(object):
 
     def __init__(self, request):
         self.request = request
-        self.db = request.registry.db
+        self.db = request.registry.db_plan  if hasattr(request.registry, 'db_plan') else request.registry.db
 
 
 def factory(request):

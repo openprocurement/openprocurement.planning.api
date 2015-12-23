@@ -63,8 +63,9 @@ def save_plan(request):
         plan.revisions.append(Revision({'author': request.authenticated_userid, 'changes': patch, 'rev': plan.rev}))
         old_date_modified = plan.dateModified
         plan.dateModified = get_now()
+        db = request.registry.db_plan  if hasattr(request.registry, 'db_plan') else request.registry.db
         try:
-            plan.store(request.registry.db)
+            plan.store(db)
         except ModelValidationError, e: # pragma: no cover
             for i in e.message:
                 request.errors.add('body', i, e.message[i])
@@ -117,7 +118,7 @@ def set_logging_context(event):
 
 
 def extract_plan_adapter(request, plan_id):
-    db = request.registry.db
+    db = request.registry.db_plan  if hasattr(request.registry, 'db_plan') else request.registry.db
     doc = db.get(plan_id)
     if doc is None:
         request.errors.add('url', 'plan_id', 'Not Found')
