@@ -24,6 +24,7 @@ from openprocurement.planning.api.utils import (
     plan_serialize,
     apply_patch,
     opresource,
+    get_db
 )
 from openprocurement.planning.api.validation import (
     validate_patch_plan_data,
@@ -54,7 +55,7 @@ class PlansResource(object):
     def __init__(self, request, context):
         self.request = request
         self.server = request.registry.couchdb_server
-        self.db = request.registry.db
+        self.db = get_db(request.registry)
         self.server_id = request.registry.server_id
 
     @json_view(permission='view_plan')

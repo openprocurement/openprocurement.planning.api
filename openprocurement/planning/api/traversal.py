@@ -20,7 +20,8 @@ class Root(object):
 
     def __init__(self, request):
         self.request = request
-        self.db = request.registry.db
+        from openprocurement.planning.api.utils import get_db
+        self.db = get_db(request.registry)
 
 
 def factory(request):
