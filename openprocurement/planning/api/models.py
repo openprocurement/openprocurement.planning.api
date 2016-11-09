@@ -57,9 +57,10 @@ class PlanItem(Model):
     description_ru = StringType()
 
     def validate_classification(self, data, classification):
-        base_cpv_code = data['__parent__'].classification.id[:3]
-        if (base_cpv_code != classification.id[:3]):
-            raise ValidationError(u"CPV group of items be identical to root cpv")
+        if isinstance(data['__parent__'].classification, Model) :
+            base_cpv_code = data['__parent__'].classification.id[:3] if data['__parent__'].classification.id else None
+            if (base_cpv_code is not None and base_cpv_code != classification.id[:3]):
+                raise ValidationError(u"CPV group of items be identical to root cpv")
 
 
 class PlanOrganization(Model):
