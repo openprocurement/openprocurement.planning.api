@@ -12,3 +12,7 @@
 openprocurement.planning.api
 ===========================
 Planning  API interface to OpenProcurement database
+
+.. image:: https://badges.gitter.im/openprocurement/openprocurement.planning.api.svg
+   :alt: Join the chat at https://gitter.im/openprocurement/openprocurement.planning.api
+   :target: https://gitter.im/openprocurement/openprocurement.planning.api?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge
