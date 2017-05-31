@@ -6,6 +6,8 @@ from openprocurement.planning.api.models import Plan
 from openprocurement.planning.api.tests.base import test_plan_data, BaseWebTest
 from openprocurement.api.models import get_now, CPV_ITEMS_CLASS_FROM
 
+test_plan_data_mode_test = test_plan_data.copy()
+test_plan_data_mode_test["mode"] = "test"
 
 class PlanTest(BaseWebTest):
     def test_simple_add_plan(self):
@@ -41,6 +43,15 @@ class AccreditationPlanTest(BaseWebTest):
             self.assertEqual(response.status, '403 Forbidden')
             self.assertEqual(response.content_type, 'application/json')
             self.assertEqual(response.json['errors'][0]["description"], "Broker Accreditation level does not permit plan creation")
+
+        self.app.authorization = ('Basic', ('broker1t', ''))
+        response = self.app.post_json('/plans', {"data": test_plan_data}, status=403)
+        self.assertEqual(response.status, '403 Forbidden')
+        self.assertEqual(response.content_type, 'application/json')
+        self.assertEqual(response.json['errors'][0]["description"], "Broker Accreditation level does not permit plan creation")
+
+        response = self.app.post_json('/plans', {"data": test_plan_data_mode_test})
+        self.assertEqual(response.status, '201 Created')
 
 
 class PlanResourceTest(BaseWebTest):
@@ -683,7 +694,7 @@ class PlanResourceTest(BaseWebTest):
         self.assertEqual(len(response.json['data']['items']), 1)
 
         response = self.app.patch_json('/plans/{}'.format(plan['id']), {'data': {'items': [{"classification": {
-            "scheme": "CPV",
+            "scheme": "ДК021",
             "id": "03117140-7",
             "description": "Послуги з харчування у школах"
         }}]}})
