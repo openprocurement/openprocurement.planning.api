@@ -1,16 +1,11 @@
 # -*- coding: utf-8 -*-
 import os.path
 from functools import partial
-from json import dumps, load
+from json import load
 from logging import getLogger
 from time import sleep
 from collections import defaultdict
-from urllib import quote
-from rfc6266 import build_header
-from urlparse import urlparse, parse_qs
-from base64 import b64encode
 from cornice.resource import resource
-from cornice.util import json_error
 from couchdb.http import ResourceConflict
 from openprocurement.api.models import Revision
 from openprocurement.api.utils import (
