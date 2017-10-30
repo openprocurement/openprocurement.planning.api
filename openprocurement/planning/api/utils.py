@@ -1,21 +1,17 @@
 # -*- coding: utf-8 -*-
+import os.path
 from functools import partial
-from json import dumps
+from json import load
 from logging import getLogger
 from time import sleep
-from urllib import quote
-from rfc6266 import build_header
-from urlparse import urlparse, parse_qs
-from base64 import b64encode
+from collections import defaultdict
 from cornice.resource import resource
-from cornice.util import json_error
 from couchdb.http import ResourceConflict
 from openprocurement.api.models import Revision
 from openprocurement.api.utils import (
     update_logging_context, context_unpack, get_revision_changes, get_now,
     apply_data_patch, error_handler
 )
-from openprocurement.planning.api.models import Plan
 from openprocurement.planning.api.traversal import factory
 from schematics.exceptions import ModelValidationError
 from pkg_resources import get_distribution
@@ -139,6 +135,22 @@ def extract_plan(request):
 
 
 def plan_from_data(request, data, raise_error=True, create=True):
+    from openprocurement.planning.api.models import Plan
     if create:
         return Plan(data)
     return Plan
+
+
+def read_json(filename):
+    file_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), filename)
+    with open(file_path) as data:
+        return load(data)
+
+
+def read_procurement_method_types():
+    data = read_json('ProcurementMethodTypes.json')
+    result = defaultdict(list, {'': ['']})
+    for item in data:
+        if not item['autoInitiated']:
+            result[str(item['procurementMethod'])].append(str(item['procurementMethodType']))
+    return {key: tuple(value) for key, value in result.iteritems()}

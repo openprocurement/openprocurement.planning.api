@@ -18,6 +18,7 @@ from openprocurement.planning.api.tests.plan_blanks import (
     create_plan_invalid,
     create_plan_generated,
     create_plan,
+    create_plan_without_procurement_method,
     get_plan,
     patch_plan,
     plan_not_found,
@@ -49,6 +50,7 @@ class PlanResourceTest(BaseWebTest):
     test_create_plan_invalid = snitch(create_plan_invalid)
     test_create_plan_generated = snitch(create_plan_generated)
     test_create_plan = snitch(create_plan)
+    test_create_plan_without_procurement_method = snitch(create_plan_without_procurement_method)
     test_get_plan = snitch(get_plan)
     test_patch_plan = snitch(patch_plan)
     test_plan_not_found = snitch(plan_not_found)
