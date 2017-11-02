@@ -9,6 +9,7 @@ from openprocurement.api.models import Unit, CPVClassification, Classification, 
 from openprocurement.api.models import schematics_embedded_role, schematics_default_role, IsoDateTimeType, ListType
 from openprocurement.api.validation import validate_cpv_group, validate_items_uniq
 from openprocurement.api.constants import CPV_ITEMS_CLASS_FROM, ADDITIONAL_CLASSIFICATIONS_SCHEMES, ADDITIONAL_CLASSIFICATIONS_SCHEMES_2017
+from openprocurement.planning.api.utils import read_procurement_method_types
 from pyramid.security import Allow
 from schematics.transforms import whitelist, blacklist
 from schematics.types import StringType, IntType, FloatType, BaseType
@@ -90,12 +91,7 @@ class PlanOrganization(Model):
     identifier = ModelType(Identifier, required=True)
 
 
-PROCEDURES = {
-    '': ('',),
-    'open': ('belowThreshold', 'aboveThresholdUA', 'aboveThresholdEU', 'aboveThresholdUA.defense', 'competitiveDialogueUA', 'competitiveDialogueEU', 'esco'),
-    'limited': ('reporting', 'negotiation', 'negotiation.quick'),
-}
-
+PROCEDURES = read_procurement_method_types()
 
 class PlanTender(Model):
     """Tender for planning model """

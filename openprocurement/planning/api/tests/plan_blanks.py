@@ -429,7 +429,7 @@ def create_plan_invalid(self):
     self.assertEqual(response.status, '422 Unprocessable Entity')
     self.assertEqual(response.content_type, 'application/json')
     self.assertEqual(response.json['status'], 'error')
-    self.assertIn({u'description': {u'procurementMethodType': [u"Value must be one of ('reporting', 'negotiation', 'negotiation.quick')."]}, u'location': u'body', u'name': u'tender'},
+    self.assertIn({u'description': {u'procurementMethodType': [u"Value must be one of ('negotiation', 'negotiation.quick', 'reporting')."]}, u'location': u'body', u'name': u'tender'},
                  response.json['errors'])
 
     response = self.app.post_json(request_path,
@@ -784,3 +784,12 @@ def esco_plan(self):
     self.assertEqual(set(plan) - set(self.initial_data), set([u'id', u'dateModified', u'datePublished', u'planID', u'owner']))
     self.assertIn('budget', plan)
     self.assertIn(plan['id'], response.headers['Location'])
+
+
+def create_plan_without_procurement_method(self):
+    data = deepcopy(self.initial_data)
+    data['tender']['procurementMethod'] = ''
+    data['tender']['procurementMethodType'] = ''
+    response = self.app.post_json('/plans', {"data": data})
+    self.assertEqual(response.status, '201 Created')
+    self.assertEqual(response.content_type, 'application/json')
