@@ -5,7 +5,7 @@ from schematics.exceptions import ValidationError
 from openprocurement.api.utils import get_now
 from openprocurement.api.models import Model, Period, Revision
 from openprocurement.api.models import Document as BaseDocument
-from openprocurement.api.models import Unit, CPVClassification, Classification, Identifier
+from openprocurement.api.models import Unit, CPVClassification, Classification, Identifier, AdditionalClassification
 from openprocurement.api.models import schematics_embedded_role, schematics_default_role, IsoDateTimeType, ListType
 from openprocurement.api.validation import validate_cpv_group, validate_items_uniq
 from openprocurement.api.constants import CPV_ITEMS_CLASS_FROM, ADDITIONAL_CLASSIFICATIONS_SCHEMES, ADDITIONAL_CLASSIFICATIONS_SCHEMES_2017
@@ -49,7 +49,7 @@ class PlanItem(Model):
     """Simple item model for planing"""
     id = StringType(required=True, min_length=1, default=lambda: uuid4().hex)
     classification = ModelType(CPVClassification, required=True)
-    additionalClassifications = ListType(ModelType(Classification), default=list())
+    additionalClassifications = ListType(ModelType(AdditionalClassification), default=list())
     unit = ModelType(Unit)  # Description of the unit which the good comes in e.g. hours, kilograms
     quantity = IntType()  # The number of units required
     deliveryDate = ModelType(Period)
